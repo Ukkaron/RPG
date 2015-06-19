@@ -11,8 +11,9 @@ class cell
 // препятствия общим количеством room_size / 2. Препятствия могут быть 2-х типов. Яма и скала. Вид препятствия определяется случайным образом.
 // Препятствия не генерируется в четырех левых верхних клетках никогда, для устранения случая полной блокировки выхода игроком.
 // Начало координат в верхнем левом углу.
-void room_generator (int n, cell platformsp[][n]) // Ошибка "use of parameter 'n' outside function body"
+void room_generator (cell *y_line[], int n)
 {
+    cell *ptr;
     int i;
     int x, y; // Переменные координаты
     bool dice; // Переменная кубика
@@ -21,9 +22,10 @@ void room_generator (int n, cell platformsp[][n]) // Ошибка "use of parame
         x = rand() % (n-2) + 2;
         y = rand() % (n-2) + 2;
         dice = rand() % 2;
-        if (dice = 1)
-           platforms[x][y].pit = 1;
+        ptr = (y_line[y] + x);
+        if(dice = 1)
+            ptr->pit = 1;
         else
-           platforms[x][y].rock = 1;
+            ptr->rock = 1;
     }
 }
