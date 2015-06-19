@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "RPG_source.h"
+
 using namespace std;
 class Entity
 {
@@ -29,7 +31,16 @@ Entity::Entity(int lvl, int exp, int gld, int wpnID, int[6] artID)
 
 int main()
 {
-  cout << "Hellow World !" << endl;
-  return 0;
+    int i;
+    int room_size;
+    srand(time(NULL));
+    room_size = rand() % 9 + 8;
+    cell platforms[room_size][room_size];
+    cell *y_line[room_size];
+    for (i=0; i< room_size; i++)
+    {
+        y_line[i] = &platforms[i][0];
+    }
+    room_generator(y_line, room_size);
 }
 
