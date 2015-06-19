@@ -1,6 +1,7 @@
 #include <iostream>
 
-#include "RPG_source.h"
+#include "Functions.h"
+#include "Structures.h"
 
 using namespace std;
 
