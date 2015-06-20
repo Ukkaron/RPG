@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "Functions.h"
-#include "Structures.h"
+#include "room.h"
+#include "units.h"
 
 using namespace std;
 
@@ -19,8 +19,8 @@ int main()
     {
         y_line[i] = &platforms[i][0];
     }
-    room_generator(y_line, room_size); // Я, сука, таки передал двумерный массив.
-    for(i=0; i<room_size; i++) // Вывод катры, покеа что в консоли.
+    room_generator(y_line, room_size);
+    for(i=0; i<room_size; i++)
     {
         for(j=0; j<room_size; j++)
         {
