@@ -25,11 +25,11 @@ int main()
         for(j=0; j<room_size; j++)
         {
             if(platforms[j][i].pit == 1)
-                printf("O");
+                printf("[O]");
             if(platforms[j][i].rock == 1)
-                printf("W");
+                printf("[W]");
             else
-                printf(" ");
+                printf("[ ]");
         }
         printf("\n");
     }
