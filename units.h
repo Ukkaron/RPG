@@ -7,10 +7,10 @@
 //  public: int Experience;
 //  public: int Gold;
 //  public: int WeaponID;
-//  public: int[] ArtifactID = new int[6];
+//  public: int[] ArtifactID = new int[6]; // Пиешет ошибку, ругается на int[]
 //  public: int X;
 //  public: int Y;
-//  public: Entity(int lvl, int exp, int gld, int wpnID, int[6] artID);
+//  public: Entity(int lvl, int exp, int gld, int wpnID, int[6] artID); // Пишет ошибку в последней переменной
 //};
 //
 //Entity::Entity(int lvl, int exp, int gld, int wpnID, int[6] artID)
@@ -21,5 +21,5 @@
 //    Experience = exp;
 //    Gold = gld;
 //    WeaponID = wpnID;
-//    ArtifactID = artID;
+//    ArtifactID = artID; // Ошибка, пишет неопределенны переменные
 //}
