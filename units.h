@@ -22,5 +22,12 @@ Entity::Entity(int lvl, int exp, int gld, int wpnID, int artID[6])
     Experience = exp;
     Gold = gld;
     WeaponID = wpnID;
-    ArtifactID = artID;
+    if(artID)
+    {
+        int i; // counter
+        for(i = 0; i < 6; i++)
+        {
+            ArtifactID[i] = (*artID + i);
+        }
+    }
 }
