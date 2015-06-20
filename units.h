@@ -8,10 +8,10 @@ class Entity
   public: int Experience;
   public: int Gold;
   public: int WeaponID;
-  public: int ArtifactID[6]; // Пиешет ошибку, ругается на int[]
+  public: int ArtifactID[6];
   public: int X;
   public: int Y;
-  public: Entity(int lvl, int exp, int gld, int wpnID, int artID[6]); // Пишет ошибку в последней переменной
+  public: Entity(int lvl, int exp, int gld, int wpnID, int artID[6]);
 };
 
 Entity::Entity(int lvl, int exp, int gld, int wpnID, int artID[6])
@@ -22,5 +22,5 @@ Entity::Entity(int lvl, int exp, int gld, int wpnID, int artID[6])
     Experience = exp;
     Gold = gld;
     WeaponID = wpnID;
-    ArtifactID = artID; // Ошибка, пишет неопределенны переменные
+    ArtifactID = artID;
 }
