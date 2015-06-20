@@ -1,12 +1,11 @@
 #include <stdlib.h>
 #include <time.h>
-#include <units.h>
 
 class cell
 {
     public: bool pit = 0;
     public: bool rock = 0;
-    public: Entity CurrentEntity;
+    public: int EntityID;
 };
 
 //  Функция генерации уровня. Принимает указатель на массив клеток и размер массива. Внутри случайным образом генерируется
