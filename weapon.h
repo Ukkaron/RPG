@@ -10,7 +10,7 @@ class cWeapon
     public: int Price;
 };
 
-class cWeaponMelee: cWeapon
+class cWeaponMelee: public cWeapon
 {
     public: int Range;
     public: cWeaponMelee(int wpnID, string Nm, int DmgPh, int DmgMg, int DmgCl, int Prc);
@@ -39,7 +39,7 @@ void cWeaponMelee::putWeaponMelee(int wpnID, string Nm, int DmgPh, int DmgMg, in
     Range = 1;
 }
 
-class cWeaponBow: cWeapon
+class cWeaponBow: public cWeapon
 {
     public: int Range;
     public: cWeaponBow(int wpnID, string Nm, int DmgPh, int DmgMg, int DmgCl, int Prc);
@@ -68,7 +68,7 @@ void cWeaponBow::putWeaponBow(int wpnID, string Nm, int DmgPh, int DmgMg, int Dm
     Range = 3;
 }
 
-class cWeaponStaff: cWeapon
+class cWeaponStaff: public cWeapon
 {
     public: int Range;
     public: cWeaponStaff(int wpnID, string Nm, int DmgPh, int DmgMg, int DmgCl, int Prc);
