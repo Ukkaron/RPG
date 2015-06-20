@@ -17,16 +17,15 @@ void room_generator (cell *y_line[], int n)
     int i;
     int x, y; // Переменные координаты
     bool dice; // Переменная кубика
-    for(i=0; i<(n/2); i++)
+    for(i=0; i<(n*0.75); i++)
     {
         x = rand() % (n-2) + 2;
         y = rand() % (n-2) + 2;
         dice = rand() % 2;
         ptr = (y_line[y] + x);
-        if(dice = 1)
+        if(dice == 1)
             ptr->pit = 1;
         else
             ptr->rock = 1;
     }
 }
-
