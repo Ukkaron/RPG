@@ -5,33 +5,19 @@ class Entity
   public: int ID;
   public: int Level;
   public: int HealthPower;
-  public: int ManaPool;
   public: int Armor;
   public: int MagicResistance;
   public: int Experience;
   public: int Gold;
-  public: int WeaponID;
-  public: int ArtifactID[6];
-  public: int SkillID[4];
-  public: Entity(int lvl, int exp, int gld, int wpnID, int artID[6]);
+  public: Entity(int lvl, int exp, int gld);
 };
 
-Entity::Entity(int lvl, int exp, int gld, int wpnID, int artID[6])
+Entity::Entity(int lvl, int exp, int gld)
 {
     Level = lvl;
     HealthPower = lvl * 100;
-    ManaPool = lvl * 150;
     Experience = exp;
     Gold = gld;
-    WeaponID = wpnID;
-    if(artID)
-    {
-        int i; // counter
-        for(i = 0; i < 6; i++)
-        {
-            ArtifactID[i] = (*artID + i);
-        }
-    }
 }
 
 class Monster: public Entity
@@ -46,7 +32,6 @@ void Monster::putMonster(int lvl, int strength, int exp, int gld, int DmgPh, int
 {
     Level = lvl;
     HealthPower = lvl*75*strength;
-    ManaPool = 0;
     Experience = exp;
     Gold = gld;
     DamagePhysical = DmgPh;
@@ -54,3 +39,11 @@ void Monster::putMonster(int lvl, int strength, int exp, int gld, int DmgPh, int
     Armor = Arm;
     MagicResistance = MgRes;
 }
+
+class cHero: public Entity
+{
+    public: int ManaPool;
+    public: int WeaponID;
+    public: int ArtifactID[6];
+    public: int SkillID[4];
+};
