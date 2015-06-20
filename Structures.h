@@ -7,10 +7,10 @@
 //  public: int Experience;
 //  public: int Gold;
 //  public: int WeaponID;
-//  public: int[] ArtifactID = new int[6];
+//  public: int[] ArtifactID = new int[6]; // Что это за бодяга ?
 //  public: int X;
 //  public: int Y;
-//  public: Entity(int lvl, int exp, int gld, int wpnID, int[6] artID);
+//  public: Entity(int lvl, int exp, int gld, int wpnID, int[6] artID); // И вот это, что ? Я имею ввиду последнюю переменную.
 //};
 //
 //Entity::Entity(int lvl, int exp, int gld, int wpnID, int[6] artID)
@@ -21,5 +21,5 @@
 //    Experience = exp;
 //    Gold = gld;
 //    WeaponID = wpnID;
-//    ArtifactID = artID;
+//    ArtifactID = artID; // А это выдает ошибку из-за того что тринадцатая строчка выдает ошибку.
 //}
