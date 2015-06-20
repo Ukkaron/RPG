@@ -1,20 +1,25 @@
 #include <stdlib.h>
 #include <time.h>
 
+enum EntityTypes { HERO, MONSTER, NONE };
+
 class cell
 {
     public: bool pit = 0;
     public: bool rock = 0;
-    public: int EntityID;
+    public: struct tEntity
+    {
+        EntityTypes Type;
+        int EntityID;
+    } EntityType;
 };
 
 //  Функция генерации уровня. Принимает указатель на массив клеток и размер массива. Внутри случайным образом генерируется
 // препятствия общим количеством room_size / 2. Препятствия могут быть 2-х типов. Яма и скала. Вид препятствия определяется случайным образом.
 // Препятствия не генерируется в четырех левых верхних клетках никогда, для устранения случая полной блокировки выхода игроком.
 // Начало координат в верхнем левом углу.
-void room_generator (cell *y_line[], int n)
+void room_generator (cell *ptr, int n)
 {
-    cell *ptr;
     int i;
     int x, y; // Переменные координаты
     bool dice; // Переменная кубика
@@ -23,10 +28,9 @@ void room_generator (cell *y_line[], int n)
         x = rand() % (n-2) + 2;
         y = rand() % (n-2) + 2;
         dice = rand() % 2;
-        ptr = (y_line[y] + x);
         if(dice == 1)
-            ptr->pit = 1;
+            (*(ptr + y*x + x)).pit = 1;
         else
-            ptr->rock = 1;
+            (*(ptr + y*x + x)).rock = 1;
     }
 }
