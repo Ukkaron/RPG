@@ -1,4 +1,6 @@
 #include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "Functions.h"
 #include "Structures.h"
@@ -7,7 +9,7 @@ using namespace std;
 
 int main()
 {
-    int i;
+    int i, j;
     int room_size;
     srand(time(NULL));
     room_size = rand() % 9 + 8;
@@ -17,6 +19,18 @@ int main()
     {
         y_line[i] = &platforms[i][0];
     }
-    room_generator(y_line, room_size);
+    room_generator(y_line, room_size); // Я, сука, таки передал двумерный массив.
+    for(i=0; i<room_size; i++) // Вывод катры, покеа что в консоли.
+    {
+        for(j=0; j<room_size; j++)
+        {
+            if(platforms[j][i].pit == 1)
+                printf("O");
+            if(platforms[j][i].rock == 1)
+                printf("W");
+            else
+                printf(" ");
+        }
+        printf("\n");
+    }
 }
-
