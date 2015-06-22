@@ -35,42 +35,44 @@ int main()
     RoomPreGenerator();
     room_generator(ptrPlatforms, rSize);
     Render();
+        bool Moved;
     do
     {
         do
         {
+            Moved = false;
             Current = getch();
             switch((int)Current)
             {
                 case 3:
                     // code for arrow up
-                    Hero.Move(ptrPlatforms, UP);
+                    Moved = Hero.Move(ptrPlatforms, rSize, UP);
                     break;
                 case 2:
                     // code for arrow down
-                    Hero.Move(ptrPlatforms, DOWN);
+                    Moved = Hero.Move(ptrPlatforms, rSize, DOWN);
                     break;
                 case 5:
                     // code for arrow right
-                    Hero.Move(ptrPlatforms, RIGHT);
+                    Moved = Hero.Move(ptrPlatforms, rSize, RIGHT);
                     break;
                 case 4:
                     // code for arrow left
-                    Hero.Move(ptrPlatforms, LEFT);
+                    Moved = Hero.Move(ptrPlatforms, rSize, LEFT);
                     break;
+                case 27:
+                    Moved = true;
             }
             clear();
             Render();
         }
-        while((int)Current != 3 || (int)Current != 2 || (int)Current != 4 || (int)Current != 5 || (int)Current != 27);
+        while(Moved == false);
         clear();
         Render();
         //spell
         clear();
         Render();
-        printw("You can quit!\n");
-        Current = getch();
-    }while(Current!='q');
+    }while(platforms[rSize - 1][rSize - 1].EntityType.Type != HERO);
     endwin();
 }
 
