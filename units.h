@@ -48,7 +48,7 @@ class cHero: public Entity
     public: int SkillID[4];
     public: void Show();
     public: void Save();
-    public: void Move(cell* ptrFlat, Arrow Key);
+    public: bool Move(cell* ptrFlat, Arrow Key);
 };
 
 void cHero::Show()
@@ -77,23 +77,69 @@ void cHero::Save()
         HeroOutput << " " << SkillID[i];
     }
 }
-void cHero::Move(cell* ptrFlat, Arrow Key)
+bool cHero::Move(cell* ptrFlat, DirKey Key)
 {
     switch(Key)
     {
         case UP:
-            // code to move up
+            if(y > 0 && IsEmpty((ptrFlat + y*16 - 16 + x)) == true)
+            {
+                (*(ptrFlat + y*16 - 16 + x)).EntityType.EntityID = 0;
+                (*(ptrFlat + y*16 - 16 + x)).EntityType.Type = HERO;
+                (*(ptrFlat + y*16 + x)).EntityType.EntityID = -1;
+                (*(ptrFlat + y*16 + x)).EntityType.Type = NONE;
+                y--;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
             break;
         case DOWN:
-            // code to move down
+            if(y < rSize && IsEmpty((ptrFlat + y*16 + 16 + x)) == true)
+            {
+                (*(ptrFlat + y*16 + 16 + x)).EntityType.EntityID = 0;
+                (*(ptrFlat + y*16 + 16 + x)).EntityType.Type = HERO;
+                (*(ptrFlat + y*16 + x)).EntityType.EntityID = -1;
+                (*(ptrFlat + y*16 + x)).EntityType.Type = NONE;
+                y++;
+                return true;
+            }
+            {
+                return false;
+            }
             break;
         case LEFT:
-            // code to move left
+            if(x > 0 && IsEmpty((ptrFlat + y*16 + x - 1)) == true)
+            {
+                (*(ptrFlat + y*16 + x - 1)).EntityType.EntityID = 0;
+                (*(ptrFlat + y*16 + x - 1)).EntityType.Type = HERO;
+                (*(ptrFlat + y*16 + x)).EntityType.EntityID = -1;
+                (*(ptrFlat + y*16 + x)).EntityType.Type = NONE;
+                x--;
+                return true;
+            }
+            {
+                return false;
+            }
             break;
         case RIGHT:
-            //code to move right
+            if(x < rSize && IsEmpty((ptrFlat + y*16 + x + 1)) == true)
+            {
+                (*(ptrFlat + y*16 + x + 1)).EntityType.EntityID = 0;
+                (*(ptrFlat + y*16 + x + 1)).EntityType.Type = HERO;
+                (*(ptrFlat + y*16 + x)).EntityType.EntityID = -1;
+                (*(ptrFlat + y*16 + x)).EntityType.Type = NONE;
+                x++;
+                return true;
+            }
+            {
+                return false;
+            }
             break;
     }
+    return false;
 }
 
 cHero Hero;
