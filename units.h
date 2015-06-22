@@ -1,7 +1,7 @@
 #include <string.h>
 #include "weapon.h"
 
-enum Arrow {UP, DOWN, LEFT, RIGHT};
+enum DirKey {UP, DOWN, LEFT, RIGHT};
 
 using namespace std;
 
@@ -48,7 +48,7 @@ class cHero: public Entity
     public: int SkillID[4];
     public: void Show();
     public: void Save();
-    public: bool Move(cell* ptrFlat, Arrow Key);
+    public: bool Move(cell* ptrFlat, int rSize, DirKey Key);
 };
 
 void cHero::Show()
@@ -77,7 +77,7 @@ void cHero::Save()
         HeroOutput << " " << SkillID[i];
     }
 }
-bool cHero::Move(cell* ptrFlat, DirKey Key)
+bool cHero::Move(cell* ptrFlat, int rSize, DirKey Key)
 {
     switch(Key)
     {
