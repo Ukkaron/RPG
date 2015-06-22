@@ -33,4 +33,15 @@ void room_generator (cell *ptr, int n)
         else
             (*(ptr + y*x + x)).rock = 1;
     }
+    for(i = 0; i < 4; i++)
+    {
+        do
+        {
+            x = rand() % n;
+            y = rand() % n;
+
+        }while((*(ptr + y*x + x)).pit == true || (*(ptr + y*x + x)).rock == true || (*(ptr + y*x + x)).EntityType.Type != NONE);
+        (*(ptr + y*x + x)).EntityType.Type = MONSTER;
+        (*(ptr + y*x + x)).EntityType.EntityID = i + 1;
+    }
 }
