@@ -12,7 +12,7 @@ using namespace std;
 
 
 int rSize;
-cell platforms[16][16];
+cell platform[16][16];
 terrain block [12];
 
 int main()
@@ -29,11 +29,11 @@ int main()
     system("cls");
     srand(time(NULL));
     rSize = rand() % 9 + 8;
-    cell *ptrPlatforms;
-    ptrPlatforms = &platforms[0][0];
-    tGenerator(ptrPlatforms, rSize, Hero.x, Hero.y);
-    eGenerator(); // Я переделаю в eGenerator
-    Render(); // ЧТО ЭТО ТАКОЕ ? Посмотри 125 строчку в функциях и выбери какой-то
+    cell *ptrPlatform;
+    ptrPlatform = &platform[0][0];
+    tGenerator(ptrPlatform, rSize, Hero.x, Hero.y);
+    eGenerator(ptrPlatform, rSize); // Я переделаю в eGenerator
+    Render(ptrPlatform, rSize); // ЧТО ЭТО ТАКОЕ ? Посмотри 125 строчку в функциях и выбери какой-то
     do
     {
         do
@@ -44,31 +44,31 @@ int main()
             {
                 case 3:
                     // code for arrow up
-                    Moved = Hero.Move(ptrPlatforms, rSize, UP);
+                    Moved = Hero.Move(ptrPlatform, rSize, UP);
                     break;
                 case 2:
                     // code for arrow down
-                    Moved = Hero.Move(ptrPlatforms, rSize, DOWN);
+                    Moved = Hero.Move(ptrPlatform, rSize, DOWN);
                     break;
                 case 5:
                     // code for arrow right
-                    Moved = Hero.Move(ptrPlatforms, rSize, RIGHT);
+                    Moved = Hero.Move(ptrPlatform, rSize, RIGHT);
                     break;
                 case 4:
                     // code for arrow left
-                    Moved = Hero.Move(ptrPlatforms, rSize, LEFT);
+                    Moved = Hero.Move(ptrPlatform, rSize, LEFT);
                     break;
                 case 27:
                     Moved = true;
             }
             system("cls");
-            Render();
+            Render(ptrPlatform, rSize);
         }
         while(Moved == false);
         system("cls");
-        Render();
+        Render(ptrPlatform, rSize);
         //spell
         system("cls");
-        Render();
-    }while(platforms[rSize - 1][rSize - 1].EntityType.Type != HERO);
+        Render(ptrPlatform, rSize);
+    }while(platform[rSize - 1][rSize - 1].eType != HERO);
 }
