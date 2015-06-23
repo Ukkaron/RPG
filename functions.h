@@ -1,6 +1,8 @@
 #ifndef FUNCTOINS_H
 #define FUNCTIONS_H
 
+#include "classes.h"
+
 bool IsEmpty(cell* ptr)
 {
     if((*ptr).pit == false && (*ptr).rock == false)
