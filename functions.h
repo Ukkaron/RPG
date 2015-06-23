@@ -175,7 +175,7 @@ void eGenerator(cell* ptr, int rSize)
             x = rand() % rSize;
             y = rand() % rSize;
 
-        }while((*(ptr + y*16 + x)).pit == true || (*(ptr + y*16 + x)).rock == true || (*(ptr + y*16 + x)).eType != NONE);
+        }while((*(ptr + y*16 + x)).tType != PLANE  || (*(ptr + y*16 + x)).eType != NONE);
         (*(ptr + y*16 + x)).eType = MONSTER;
         (*(ptr + y*16 + x)).eID = i;
         Monster[i].x = x;
