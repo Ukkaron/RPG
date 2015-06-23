@@ -86,14 +86,39 @@ void MonsterGenerator()
     }
 }
 
-void room_generator (cell *ptr, int n)
+void tGenerator (cell *ptr, int rSize, int xHero, int yHero)
 {
     int i;
     int x, y; // Переменные координаты
     bool dice; // Переменная кубика
     for(i=0; i<(n*0.75); i++)
     {
-        
+        dice = rand() % 2;
+        x = rand() % rSize;
+        y = rand() % rSize;
+        if ( (xHero < (x-1)) && (yHero < (y-1)) && ((*(ptr + y*16 + x)).tType == PLANE) )
+        {
+            if (rand == 1)
+            {
+                (*(ptr + y*16 + x)).tType = ROCK;
+                (*(ptr + y*16 + x)).tID = i;
+                block[i].id = i;
+                block[i].x = x;
+                block[i].y = y;
+                block[i].value = rand() % 200 + 200;
+            }
+            else
+            {
+                (*(ptr + y*16 + x)).tType = PIT;
+                (*(ptr + y*16 + x)).tID = i;
+                block[i].id = i;
+                block[i].x = x;
+                block[i].y = y;
+                block[i].value = rand() % 200 + 200;
+            }
+        }
+        else
+            i--;
     }
 }
 
@@ -135,20 +160,12 @@ void Render(cell* ptr, int rSize)
     }
 }
 
-void RoomPreGenerator(cell* ptr, int rSize)
+void eGenerator(cell* ptr, int rSize)
 {
     int i;
     int j;
     int x;
     int y;
-    for(i = 0; i < rSize; i++)
-    {
-        for(j = 0; j < rSize; j++)
-        {
-            (*(ptr + i*16 + j)).eType = NONE;
-            (*(ptr + i*16 + j)).eID = -1;
-        }
-    }
     (*ptr).eType = HERO;
     (*ptr).eID = 0;
     for(i = 0; i < (rSize*0.75); i++)
