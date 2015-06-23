@@ -8,11 +8,10 @@
 
 using namespace std;
 
-void Render();
-void RoomPreGenerator();
 
 int rSize;
 cell platforms[16][16];
+terrain block [12];
 
 int main()
 {
@@ -30,9 +29,9 @@ int main()
     rSize = rand() % 9 + 8;
     cell *ptrPlatforms;
     ptrPlatforms = &platforms[0][0];
-    RoomPreGenerator();
-    room_generator(ptrPlatforms, rSize);
-    Render();
+    tGenerator(ptrPlatforms, rSize, Hero.x, Hero.y);
+    eGenerator(); // Я переделаю в eGenerator
+    Render(); // ЧТО ЭТО ТАКОЕ ? Посмотри 125 строчку в функциях и выбери какой-то
     do
     {
         do
