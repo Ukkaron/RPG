@@ -4,7 +4,7 @@
 using namespace std;
 
 enum EntityType { NONE, MONSTER, HERO };
-enum TerrainType { PLANE, PIT, ROCK }
+enum TerrainType { PLANE, PIT, ROCK };
 enum DirKey {UP, DOWN, LEFT, RIGHT};
 
 class cell
@@ -29,7 +29,7 @@ class terrain
         int id;
         int value; // Значение глебины, или количество ХП.
         int x, y;
-}
+};
 
 class cWeapon
 {
@@ -102,14 +102,14 @@ class cHero: public Entity
 
 void cHero::Show()
 {
-    printw("Hero %s \n", Name);
-    printw("Level: %d \n", Level);
-    printw("Health power: %d \n", HealthPower);
-    printw("Mana: %d \n", ManaPool);
-    printw("Gold: %d \n", Gold);
+    printf("Hero %s \n", Name);
+    printf("Level: %d \n", Level);
+    printf("Health power: %d \n", HealthPower);
+    printf("Mana: %d \n", ManaPool);
+    printf("Gold: %d \n", Gold);
     char Current[50];
     strcpy(Current, Weapon[WeaponID].Name.c_str());
-    printw("Weared weapon: %s \n", Current);
+    printf("Weared weapon: %s \n", Current);
 }
 void cHero::Save()
 {
