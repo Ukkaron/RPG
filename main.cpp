@@ -4,8 +4,8 @@
 #include <fstream>
 #include <ncurses.h>
 
-#include "room.h"
-#include "units.h"
+#include "classes.h"
+#include "functions.h"
 
 using namespace std;
 
