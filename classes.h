@@ -16,6 +16,13 @@ class cell
         int tID;
 };
 
+class terrain
+{
+    public:
+        int id;
+        int value; // Значение глебины, или количество ХП.
+}
+
 class cWeapon
 {
     public:
