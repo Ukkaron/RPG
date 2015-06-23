@@ -3,19 +3,17 @@
 
 using namespace std;
 
-enum EntityTypes { HERO, MONSTER, NONE };
+enum EntityType { NONE, MONSTER, HERO };
+enum TerrainType { PLANE, PIT, ROCK }
 enum DirKey {UP, DOWN, LEFT, RIGHT};
 
 class cell
 {
-    public: bool pit;
-    public: bool rock;
-    public: EntityTypes eType;
-    public: struct tEntity
-    {
-        EntityTypes Type;
-        int EntityID;
-    } EntityType;
+    public:
+        EntityType eType;
+        TerrainType tType;
+        int eID;
+        int tID;
 };
 
 class cWeapon
@@ -120,10 +118,10 @@ bool cHero::Move(cell* ptrFlat, int rSize, DirKey Key)
         case UP:
             if(y > 0 && IsEmpty((ptrFlat + y*16 - 16 + x)) == true)
             {
-                (*(ptrFlat + y*16 - 16 + x)).EntityType.EntityID = 0;
-                (*(ptrFlat + y*16 - 16 + x)).EntityType.Type = HERO;
-                (*(ptrFlat + y*16 + x)).EntityType.EntityID = -1;
-                (*(ptrFlat + y*16 + x)).EntityType.Type = NONE;
+                (*(ptrFlat + y*16 - 16 + x)).eID = 0;
+                (*(ptrFlat + y*16 - 16 + x)).eType = HERO;
+                (*(ptrFlat + y*16 + x)).eID = -1;
+                (*(ptrFlat + y*16 + x)).eType = NONE;
                 y--;
                 return true;
             }
@@ -135,10 +133,10 @@ bool cHero::Move(cell* ptrFlat, int rSize, DirKey Key)
         case DOWN:
             if(y < rSize && IsEmpty((ptrFlat + y*16 + 16 + x)) == true)
             {
-                (*(ptrFlat + y*16 + 16 + x)).EntityType.EntityID = 0;
-                (*(ptrFlat + y*16 + 16 + x)).EntityType.Type = HERO;
-                (*(ptrFlat + y*16 + x)).EntityType.EntityID = -1;
-                (*(ptrFlat + y*16 + x)).EntityType.Type = NONE;
+                (*(ptrFlat + y*16 + 16 + x)).eID = 0;
+                (*(ptrFlat + y*16 + 16 + x)).eType = HERO;
+                (*(ptrFlat + y*16 + x)).eID = -1;
+                (*(ptrFlat + y*16 + x)).eType = NONE;
                 y++;
                 return true;
             }
@@ -149,10 +147,10 @@ bool cHero::Move(cell* ptrFlat, int rSize, DirKey Key)
         case LEFT:
             if(x > 0 && IsEmpty((ptrFlat + y*16 + x - 1)) == true)
             {
-                (*(ptrFlat + y*16 + x - 1)).EntityType.EntityID = 0;
-                (*(ptrFlat + y*16 + x - 1)).EntityType.Type = HERO;
-                (*(ptrFlat + y*16 + x)).EntityType.EntityID = -1;
-                (*(ptrFlat + y*16 + x)).EntityType.Type = NONE;
+                (*(ptrFlat + y*16 + x - 1)).eID = 0;
+                (*(ptrFlat + y*16 + x - 1)).eType = HERO;
+                (*(ptrFlat + y*16 + x)).eID = -1;
+                (*(ptrFlat + y*16 + x)).eType = NONE;
                 x--;
                 return true;
             }
@@ -163,10 +161,10 @@ bool cHero::Move(cell* ptrFlat, int rSize, DirKey Key)
         case RIGHT:
             if(x < rSize && IsEmpty((ptrFlat + y*16 + x + 1)) == true)
             {
-                (*(ptrFlat + y*16 + x + 1)).EntityType.EntityID = 0;
-                (*(ptrFlat + y*16 + x + 1)).EntityType.Type = HERO;
-                (*(ptrFlat + y*16 + x)).EntityType.EntityID = -1;
-                (*(ptrFlat + y*16 + x)).EntityType.Type = NONE;
+                (*(ptrFlat + y*16 + x + 1)).eID = 0;
+                (*(ptrFlat + y*16 + x + 1)).eType = HERO;
+                (*(ptrFlat + y*16 + x)).eID = -1;
+                (*(ptrFlat + y*16 + x)).eType = NONE;
                 x++;
                 return true;
             }
@@ -190,9 +188,9 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key)
             {
                 for(i = 1; i <= Sword[WeaponID].Range; i++)
                 {
-                    if( (*(ptrFlat + (y - i)*16 + x)).EntityType.Type == MONSTER )
+                    if( (*(ptrFlat + (y - i)*16 + x)).eType == MONSTER )
                     {
-                        j = (*(ptrFlat + (y - i)*16 + x)).EntityType.EntityID;
+                        j = (*(ptrFlat + (y - i)*16 + x)).eID;
                         DealDamage = Sword[WeaponID].DamagePhysical * (1 - Monster[j].Armor / 1000);
                         DealDamage += Sword[WeaponID].DamageMagic * (1 - Monster[j].MagicResistance / 1000);
                         DealDamage += Sword[WeaponID].DamageClear;
@@ -201,8 +199,8 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key)
                         Log << "> Dealing Damage " << DealDamage << endl;
                         if(Monster[j].HealthPower < DealDamage)
                         {
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).EntityType.Type = NONE;
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).EntityType.EntityID = -1;
+                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
+                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
                             Experience += Monster[j].Experience / 10;
                             Level = Experience / 1000;
                             Gold += Monster[j].Gold;
@@ -228,7 +226,7 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key)
                 {
                     if( (ptrFlat + (y + i)*16 + x) )
                     {
-                        j = (*(ptrFlat + (y + i)*16 + x)).EntityType.EntityID;
+                        j = (*(ptrFlat + (y + i)*16 + x)).eID;
                         DealDamage = Sword[WeaponID].DamagePhysical * (1 - Monster[j].Armor / 1000);
                         DealDamage += Sword[WeaponID].DamageMagic * (1 - Monster[j].MagicResistance / 1000);
                         DealDamage += Sword[WeaponID].DamageClear;
@@ -237,8 +235,8 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key)
                         Log << "> Dealing Damage " << DealDamage << endl;
                         if(Monster[j].HealthPower < DealDamage)
                         {
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).EntityType.Type = NONE;
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).EntityType.EntityID = -1;
+                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
+                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
                             Experience += Monster[j].Experience / 10;
                             Level = Experience / 1000;
                             Gold += Monster[j].Gold;
@@ -264,7 +262,7 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key)
                 {
                     if( (ptrFlat + y*16 + x - i) )
                     {
-                        j = (*(ptrFlat + y*16 + x - i)).EntityType.EntityID;
+                        j = (*(ptrFlat + y*16 + x - i)).eID;
                         DealDamage = Sword[WeaponID].DamagePhysical * (1 - Monster[j].Armor / 1000);
                         DealDamage += Sword[WeaponID].DamageMagic * (1 - Monster[j].MagicResistance / 1000);
                         DealDamage += Sword[WeaponID].DamageClear;
@@ -273,8 +271,8 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key)
                         Log << "> Dealing Damage " << DealDamage << endl;
                         if(Monster[j].HealthPower < DealDamage)
                         {
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).EntityType.Type = NONE;
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).EntityType.EntityID = -1;
+                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
+                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
                             Experience += Monster[j].Experience / 10;
                             Level = Experience / 1000;
                             Gold += Monster[j].Gold;
@@ -300,7 +298,7 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key)
                 {
                     if( (ptrFlat + y*16 + x + i) )
                     {
-                        j = (*(ptrFlat + y*16 + x + i)).EntityType.EntityID;
+                        j = (*(ptrFlat + y*16 + x + i)).eID;
                         DealDamage = Sword[WeaponID].DamagePhysical * (1 - Monster[j].Armor / 1000);
                         DealDamage += Sword[WeaponID].DamageMagic * (1 - Monster[j].MagicResistance / 1000);
                         DealDamage += Sword[WeaponID].DamageClear;
@@ -309,8 +307,8 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key)
                         Log << "> Dealing Damage " << DealDamage << endl;
                         if(Monster[j].HealthPower < DealDamage)
                         {
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).EntityType.Type = NONE;
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).EntityType.EntityID = -1;
+                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
+                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
                             Experience += Monster[j].Experience / 10;
                             Level = Experience / 1000;
                             Gold += Monster[j].Gold;
