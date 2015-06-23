@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <conio.h>
+#include <string.h>
 
 #include "classes.h"
 #include "functions.h"
