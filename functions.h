@@ -5,7 +5,7 @@
 
 bool IsEmpty(cell* ptr)
 {
-    if((*ptr).pit == false && (*ptr).rock == false)
+    if((*ptr).tType == false)
     {
         if((*ptr).eType == NONE)
         {
@@ -41,12 +41,12 @@ void GenerateHero()
         {
             HeroInput >> Hero.SkillID[i];
         }
-        printw("Hero loaded.\n");
+        printf("Hero loaded.\n");
         Hero.Show();
     }
     else
     {
-        printw("Enter the name of your hero: ");
+        printf("Enter the name of your hero: ");
         cin >> Hero.Name;
         Hero.Experience = 1000;
         Hero.Level = Hero.Experience / 1000;
@@ -131,32 +131,32 @@ void Render(cell* ptr, int rSize)
         {
             if((*(ptr + i*16 + j)).pit == 1)
             {
-                printw("[O]");
+                printf("[O]");
             }
             else
             {
                 if((*(ptr + i*16 + j)).rock == 1)
                 {
-                    printw("[W]");
+                    printf("[W]");
                 }
                 else
                 {
                     switch ((*(ptr + i*16 + j)).eType)
                     {
                         case HERO:
-                            printw("[H]");
+                            printf("[H]");
                             break;
                         case MONSTER:
-                            printw("[A]");
+                            printf("[A]");
                             break;
                         case NONE:
-                            printw("[ ]");
+                            printf("[ ]");
                             break;
                     }
                 }
             }
         }
-        printw("\n");
+        printf("\n");
     }
 }
 
