@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
+#include <conio.h>
 
 #include "classes.h"
 #include "functions.h"
@@ -22,7 +23,7 @@ int main()
     GenerateHero();
     printw("Press S to start");
     do
-        Current = getch();
+        Current = _getch();
     while(Current != 's');
     system("cls");
     srand(time(NULL));
@@ -37,7 +38,7 @@ int main()
         do
         {
             Moved = false;
-            Current = getch();
+            Current = _getch();
             switch((int)Current)
             {
                 case 3:
