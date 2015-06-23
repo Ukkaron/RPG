@@ -7,7 +7,7 @@ bool IsEmpty(cell* ptr)
 {
     if((*ptr).pit == false && (*ptr).rock == false)
     {
-        if((*ptr).EntityType.Type == NONE)
+        if((*ptr).eType == NONE)
         {
             return true;
         }
@@ -116,7 +116,7 @@ void Render(cell* ptr, int rSize)
                 }
                 else
                 {
-                    switch ((*(ptr + i*16 + j)).EntityType.Type)
+                    switch ((*(ptr + i*16 + j)).eType)
                     {
                         case HERO:
                             printw("[H]");
@@ -145,12 +145,12 @@ void RoomPreGenerator(cell* ptr, int rSize)
     {
         for(j = 0; j < rSize; j++)
         {
-            (*(ptr + i*16 + j)).EntityType.Type = NONE;
-            (*(ptr + i*16 + j)).EntityType.EntityID = -1;
+            (*(ptr + i*16 + j)).eType = NONE;
+            (*(ptr + i*16 + j)).eID = -1;
         }
     }
-    (*ptr).EntityType.Type = HERO;
-    (*ptr).EntityType.EntityID = 0;
+    (*ptr).eType = HERO;
+    (*ptr).eID = 0;
     for(i = 0; i < (rSize*0.75); i++)
     {
         do
@@ -158,9 +158,9 @@ void RoomPreGenerator(cell* ptr, int rSize)
             x = rand() % rSize;
             y = rand() % rSize;
 
-        }while((*(ptr + y*16 + x)).pit == true || (*(ptr + y*16 + x)).rock == true || (*(ptr + y*16 + x)).EntityType.Type != NONE);
-        (*(ptr + y*16 + x)).EntityType.Type = MONSTER;
-        (*(ptr + y*16 + x)).EntityType.EntityID = i;
+        }while((*(ptr + y*16 + x)).pit == true || (*(ptr + y*16 + x)).rock == true || (*(ptr + y*16 + x)).eType != NONE);
+        (*(ptr + y*16 + x)).eType = MONSTER;
+        (*(ptr + y*16 + x)).eID = i;
         Monster[i].x = x;
         Monster[i].y = y;
     }
