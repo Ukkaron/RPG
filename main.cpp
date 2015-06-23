@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
-#include <ncurses.h>
 
 #include "classes.h"
 #include "functions.h"
@@ -18,8 +17,7 @@ cell platforms[16][16];
 int main()
 {
     char Current;
-    WINDOW* CurrentWindow;
-    CurrentWindow = initscr();
+    bool Moved;
     keypad(stdscr, true);
     GenerateMeleeWeapons();
     GenerateHero();
@@ -27,7 +25,7 @@ int main()
     do
         Current = getch();
     while(Current != 's');
-    clear();
+    system("cls");
     srand(time(NULL));
     rSize = rand() % 9 + 8;
     cell *ptrPlatforms;
@@ -35,7 +33,6 @@ int main()
     RoomPreGenerator();
     room_generator(ptrPlatforms, rSize);
     Render();
-        bool Moved;
     do
     {
         do
@@ -63,69 +60,14 @@ int main()
                 case 27:
                     Moved = true;
             }
-            clear();
+            system("cls");
             Render();
         }
         while(Moved == false);
-        clear();
+        system("cls");
         Render();
         //spell
-        clear();
+        system("cls");
         Render();
     }while(platforms[rSize - 1][rSize - 1].EntityType.Type != HERO);
-    endwin();
-}
-
-void Render()
-{
-    int i, j;
-    for(i=0; i<rSize; i++)
-    {
-        for(j=0; j<rSize; j++)
-        {
-            if(platforms[i][j].pit == 1)
-            {
-                printw("[O]");
-            }
-            else
-            {
-                if(platforms[i][j].rock == 1)
-                {
-                    printw("[W]");
-                }
-                else
-                {
-                    switch (platforms[i][j].EntityType.Type)
-                    {
-                        case HERO:
-                            printw("[H]");
-                            break;
-                        case MONSTER:
-                            printw("[A]");
-                            break;
-                        case NONE:
-                            printw("[ ]");
-                            break;
-                    }
-                }
-            }
-        }
-        printw("\n");
-    }
-}
-
-void RoomPreGenerator()
-{
-    int i;
-    int j;
-    for(i = 0; i < rSize; i++)
-    {
-        for(j = 0; j < rSize; j++)
-        {
-            platforms[i][j].EntityType.Type = NONE;
-            platforms[i][j].EntityType.EntityID = -1;
-        }
-    }
-    platforms[0][0].EntityType.Type = HERO;
-    platforms[0][0].EntityType.EntityID = 0;
 }
