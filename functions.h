@@ -93,13 +93,7 @@ void room_generator (cell *ptr, int n)
     bool dice; // Переменная кубика
     for(i=0; i<(n*0.75); i++)
     {
-        x = rand() % (n-2) + 2;
-        y = rand() % (n-2) + 2;
-        dice = rand() % 2;
-        if(dice == 1)
-            (*(ptr + y*x + x)).pit = true;
-        else
-            (*(ptr + y*x + x)).rock = true;
+        
     }
 }
 
