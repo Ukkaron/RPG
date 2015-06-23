@@ -14,6 +14,13 @@ class cell
         TerrainType tType;
         int eID;
         int tID;
+        cell()
+        {
+            eType = NONE;
+            tType = PLANE;
+            eID = -1;
+            tID = -1;
+        }
 };
 
 class terrain
@@ -21,6 +28,7 @@ class terrain
     public:
         int id;
         int value; // Значение глебины, или количество ХП.
+        int x, y;
 }
 
 class cWeapon
