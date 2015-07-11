@@ -261,7 +261,7 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key, cWeapon Sword[], cMonst
             }
             break;
         case DOWN:
-            if(y < rSize)
+            if(y < (rSize - 1))
             {
                 for(i = 1; i <= Sword[WeaponID].Range; i++)
                 {
@@ -343,7 +343,7 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key, cWeapon Sword[], cMonst
             }
             break;
         case RIGHT:
-            if(y > 0)
+            if(x < (rSize - 1))
             {
                 for(i = 1; i <= Sword[WeaponID].Range; i++)
                 {
