@@ -348,6 +348,7 @@ int main()
                 }
             }
         }//spell
+        SDL_RenderClear(renderer);
         Hero.AllowAttackTexture = true;
         Render(ptrPlatform, rSize, texEmptyCell, texHeroStandby, texHeroAttack, texMonster, texPit, texRock);
         bool Attacked = false;
@@ -398,9 +399,12 @@ int main()
                 }
             }
         }
+        SDL_RenderClear(renderer);
         Hero.AllowAttackTexture = false;
         Render(ptrPlatform, rSize, texEmptyCell, texHeroStandby, texHeroAttack, texMonster, texPit, texRock);
     }while(Platform[rSize - 1][rSize - 1].eType != HERO && Quit == false);
+    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
     for(i = 0; i < 3; i++);
     {
         SDL_DestroyTexture(texEmptyCell[i]);
