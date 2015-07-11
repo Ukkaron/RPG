@@ -9,19 +9,22 @@ enum EntityType { NONE, MONSTER, HERO };
 enum TerrainType { PLANE, PIT, ROCK };
 enum DirKey {UP, DOWN, LEFT, RIGHT};
 
+ofstream fLog("last.log");
+
 class cell
 {
     public:
         EntityType eType;
         TerrainType tType;
         int eID;
-        int tID;
+        int value;
+        int Texture;
         cell()
         {
             eType = NONE;
             tType = PLANE;
             eID = -1;
-            tID = -1;
+            value = 0;
         }
 };
 
@@ -71,16 +74,20 @@ void cWeapon::putWeapon(int wpnID, string wpnName, int DmgPh, int DmgMg, int Dmg
 
 class Entity
 {
-  public: int ID;
-  public: char Name[50];
-  public: int Level;
-  public: int HealthPower;
-  public: int Armor;
-  public: int MagicResistance;
-  public: int Experience;
-  public: int Gold;
-  public: int x;
-  public: int y;
+    public:
+        int ID;
+        bool Dead;
+        char Name[50];
+        int Level;
+        int HealthPower;
+        int Armor;
+        int MagicResistance;
+        int Experience;
+        int Gold;
+        int x;
+        int y;
+        DirKey Direction;
+        bool AllowAttackTexture;
 };
 
 class cMonster: public Entity
@@ -104,14 +111,15 @@ void cMonster::putMonster(int lvl, int strength, int exp, int gld, int DmgPh, in
 
 class cHero: public Entity
 {
-    public: int ManaPool;
-    public: int WeaponID;
-    public: int ArtifactID[6];
-    public: int SkillID[4];
-    public: void Show(cWeapon Weapon[]);
-    public: void Save();
-    public: bool Move(cell* ptrFlat, int rSize, DirKey Key);
-    public: bool Attack(cell* ptrFlat, int rSize, DirKey Key, cWeapon Sword[], cMonster Monster[]);
+    public:
+        int ManaPool;
+        int WeaponID;
+        int ArtifactID[6];
+        int SkillID[4];
+        void Show(cWeapon Weapon[]);
+        void Save();
+        bool Move(cell* ptrFlat, int rSize, DirKey Key);
+        bool Attack(cell* ptrFlat, int rSize, DirKey Key, cWeapon Sword[], cMonster Monster[]);
 };
 
 void cHero::Show(cWeapon Weapon[])
@@ -158,7 +166,7 @@ bool cHero::Move(cell* ptrFlat, int rSize, DirKey Key)
             }
             break;
         case DOWN:
-            if(y < rSize && IsEmpty((ptrFlat + y*16 + 16 + x)) == true)
+            if(y < (rSize - 1) && IsEmpty((ptrFlat + y*16 + 16 + x)) == true)
             {
                 (*(ptrFlat + y*16 + 16 + x)).eID = 0;
                 (*(ptrFlat + y*16 + 16 + x)).eType = HERO;
@@ -186,7 +194,7 @@ bool cHero::Move(cell* ptrFlat, int rSize, DirKey Key)
             }
             break;
         case RIGHT:
-            if(x < rSize && IsEmpty((ptrFlat + y*16 + x + 1)) == true)
+            if(x < (rSize - 1) && IsEmpty((ptrFlat + y*16 + x + 1)) == true)
             {
                 (*(ptrFlat + y*16 + x + 1)).eID = 0;
                 (*(ptrFlat + y*16 + x + 1)).eType = HERO;
@@ -202,6 +210,7 @@ bool cHero::Move(cell* ptrFlat, int rSize, DirKey Key)
     }
     return false;
 }
+
 ofstream Log("attack.log");
 bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key, cWeapon Sword[], cMonster Monster[])
 {
@@ -222,21 +231,26 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key, cWeapon Sword[], cMonst
                         DealDamage += Sword[WeaponID].DamageMagic * (1 - Monster[j].MagicResistance / 1000);
                         DealDamage += Sword[WeaponID].DamageClear;
                         DealDamage *= Level;
-                        Log << "> Monster HP " << Monster[j].HealthPower << endl;
+                        Log << "> Monster HP before attack " << Monster[j].HealthPower << endl;
                         Log << "> Dealing Damage " << DealDamage << endl;
-                        if(Monster[j].HealthPower < DealDamage)
+                        if(!Monster[j].Dead)
                         {
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
-                            Experience += Monster[j].Experience / 10;
-                            Level = Experience / 1000;
-                            Gold += Monster[j].Gold;
+                            if(Monster[j].HealthPower <= DealDamage)
+                            {
+                                (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
+                                (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
+                                Experience += Monster[j].Experience / 10;
+                                Level = Experience / 1000;
+                                Gold += Monster[j].Gold;
+                                Monster[j].Dead = true;
+                                Monster[j].HealthPower = 0;
+                            }
+                            else
+                            {
+                                Monster[j].HealthPower -= DealDamage;
+                            }
+                            Log << "> Monster HP after attack " << Monster[j].HealthPower << endl;
                         }
-                        else
-                        {
-                            Monster[j].HealthPower -= DealDamage;
-                        }
-                        Log << "> Monster HP " << Monster[j].HealthPower << endl;
                     }
                 }
                 return true;
@@ -251,28 +265,33 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key, cWeapon Sword[], cMonst
             {
                 for(i = 1; i <= Sword[WeaponID].Range; i++)
                 {
-                    if( (ptrFlat + (y + i)*16 + x) )
+                    if( (*(ptrFlat + (y + i)*16 + x)).eType == MONSTER)
                     {
                         j = (*(ptrFlat + (y + i)*16 + x)).eID;
                         DealDamage = Sword[WeaponID].DamagePhysical * (1 - Monster[j].Armor / 1000);
                         DealDamage += Sword[WeaponID].DamageMagic * (1 - Monster[j].MagicResistance / 1000);
                         DealDamage += Sword[WeaponID].DamageClear;
                         DealDamage *= Level;
-                        Log << "> Monster HP " << Monster[j].HealthPower << endl;
+                        Log << "> Monster HP before attack " << Monster[j].HealthPower << endl;
                         Log << "> Dealing Damage " << DealDamage << endl;
-                        if(Monster[j].HealthPower < DealDamage)
+                        if(!Monster[j].Dead)
                         {
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
-                            Experience += Monster[j].Experience / 10;
-                            Level = Experience / 1000;
-                            Gold += Monster[j].Gold;
+                            if(Monster[j].HealthPower <= DealDamage)
+                            {
+                                (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
+                                (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
+                                Experience += Monster[j].Experience / 10;
+                                Level = Experience / 1000;
+                                Gold += Monster[j].Gold;
+                                Monster[j].Dead = true;
+                                Monster[j].HealthPower = 0;
+                            }
+                            else
+                            {
+                                Monster[j].HealthPower -= DealDamage;
+                            }
+                            Log << "> Monster HP after attack " << Monster[j].HealthPower << endl;
                         }
-                        else
-                        {
-                            Monster[j].HealthPower -= DealDamage;
-                        }
-                        Log << "> Monster HP " << Monster[j].HealthPower << endl;
                     }
                 }
                 return true;
@@ -287,28 +306,33 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key, cWeapon Sword[], cMonst
             {
                 for(i = 1; i <= Sword[WeaponID].Range; i++)
                 {
-                    if( (ptrFlat + y*16 + x - i) )
+                    if( (*(ptrFlat + y*16 + x - i)).eType == MONSTER)
                     {
                         j = (*(ptrFlat + y*16 + x - i)).eID;
                         DealDamage = Sword[WeaponID].DamagePhysical * (1 - Monster[j].Armor / 1000);
                         DealDamage += Sword[WeaponID].DamageMagic * (1 - Monster[j].MagicResistance / 1000);
                         DealDamage += Sword[WeaponID].DamageClear;
                         DealDamage *= Level;
-                        Log << "> Monster HP " << Monster[j].HealthPower << endl;
+                        Log << "> Monster HP before attack " << Monster[j].HealthPower << endl;
                         Log << "> Dealing Damage " << DealDamage << endl;
-                        if(Monster[j].HealthPower < DealDamage)
+                        if(!Monster[j].Dead)
                         {
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
-                            Experience += Monster[j].Experience / 10;
-                            Level = Experience / 1000;
-                            Gold += Monster[j].Gold;
+                            if(Monster[j].HealthPower <= DealDamage)
+                            {
+                                (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
+                                (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
+                                Experience += Monster[j].Experience / 10;
+                                Level = Experience / 1000;
+                                Gold += Monster[j].Gold;
+                                Monster[j].Dead = true;
+                                Monster[j].HealthPower = 0;
+                            }
+                            else
+                            {
+                                Monster[j].HealthPower -= DealDamage;
+                            }
+                            Log << "> Monster HP after attack " << Monster[j].HealthPower << endl;
                         }
-                        else
-                        {
-                            Monster[j].HealthPower -= DealDamage;
-                        }
-                        Log << "> Monster HP " << Monster[j].HealthPower << endl;
                     }
                 }
                 return true;
@@ -323,28 +347,33 @@ bool cHero::Attack(cell* ptrFlat, int rSize, DirKey Key, cWeapon Sword[], cMonst
             {
                 for(i = 1; i <= Sword[WeaponID].Range; i++)
                 {
-                    if( (ptrFlat + y*16 + x + i) )
+                    if( (*(ptrFlat + y*16 + x + i)).eType == MONSTER)
                     {
                         j = (*(ptrFlat + y*16 + x + i)).eID;
                         DealDamage = Sword[WeaponID].DamagePhysical * (1 - Monster[j].Armor / 1000);
                         DealDamage += Sword[WeaponID].DamageMagic * (1 - Monster[j].MagicResistance / 1000);
                         DealDamage += Sword[WeaponID].DamageClear;
                         DealDamage *= Level;
-                        Log << "> Monster HP " << Monster[j].HealthPower << endl;
+                        Log << "> Monster HP before attack " << Monster[j].HealthPower << endl;
                         Log << "> Dealing Damage " << DealDamage << endl;
-                        if(Monster[j].HealthPower < DealDamage)
+                        if(!Monster[j].Dead)
                         {
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
-                            (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
-                            Experience += Monster[j].Experience / 10;
-                            Level = Experience / 1000;
-                            Gold += Monster[j].Gold;
+                            if(Monster[j].HealthPower <= DealDamage)
+                            {
+                                (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eType = NONE;
+                                (*(ptrFlat + Monster[j].y*16 + Monster[j].x)).eID = -1;
+                                Experience += Monster[j].Experience / 10;
+                                Level = Experience / 1000;
+                                Gold += Monster[j].Gold;
+                                Monster[j].Dead = true;
+                                Monster[j].HealthPower = 0;
+                            }
+                            else
+                            {
+                                Monster[j].HealthPower -= DealDamage;
+                            }
+                            Log << "> Monster HP after attack " << Monster[j].HealthPower << endl;
                         }
-                        else
-                        {
-                            Monster[j].HealthPower -= DealDamage;
-                        }
-                        Log << "> Monster HP " << Monster[j].HealthPower << endl;
                     }
                 }
                 return true;
